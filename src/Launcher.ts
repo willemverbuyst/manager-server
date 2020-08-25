@@ -1,7 +1,6 @@
 import { Server } from './Server/Server';
 
 class Launcher {
-  private name: string;
   private server: Server;
 
   constructor() {
@@ -9,7 +8,7 @@ class Launcher {
   }
 
   public launchApp() {
-    console.log('The app started');
+    console.log('started app');
     this.server.createServer();
   }
 }
