@@ -1,4 +1,4 @@
-import { Server } from './Server';
+import { Server } from './Server/Server';
 
 class Launcher {
   private name: string;
