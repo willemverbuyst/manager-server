@@ -1,16 +1,22 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { UsersDBAccess } from '../User/UsersDBAccess';
-import { HTTP_METHODS, HTTP_CODES } from '../Shared/Model';
+import { HTTP_METHODS, HTTP_CODES, AccessRight } from '../Shared/Model';
 import { Utils } from './Utils';
 import { BaseRequestHandler } from './BaseRequestHandler';
-import { stringify } from 'querystring';
+import { Tokenvalidator } from './Model';
 
 export class UserHandler extends BaseRequestHandler {
   private usersDBAccess: UsersDBAccess = new UsersDBAccess();
+  private tokenValidator: Tokenvalidator;
 
-  constructor(req: IncomingMessage, res: ServerResponse) {
+  constructor(
+    req: IncomingMessage,
+    res: ServerResponse,
+    tokenValidator: Tokenvalidator
+  ) {
     super(req, res);
+    this.tokenValidator = tokenValidator;
   }
 
   async handleRequest(): Promise<void> {
@@ -26,24 +32,41 @@ export class UserHandler extends BaseRequestHandler {
   }
 
   private async handleGet() {
-    const parsedUrl = Utils.getUrlParameters(this.req.url);
-    if (parsedUrl) {
-      const userId = parsedUrl.query.id;
+    const operationAuthorized = await this.operationAuthorized(
+      AccessRight.READ
+    );
+    if (operationAuthorized) {
+      const parsedUrl = Utils.getUrlParameters(this.req.url);
+      if (parsedUrl) {
+        const userId = parsedUrl.query.id;
 
-      if (userId) {
-        const user = await this.usersDBAccess.getUsrById(userId as string);
-        if (user) {
-          this.respondJsonObject(HTTP_CODES.OK, user);
+        if (userId) {
+          const user = await this.usersDBAccess.getUsrById(userId as string);
+          if (user) {
+            this.respondJsonObject(HTTP_CODES.OK, user);
+          } else {
+            this.handleNotFound();
+          }
         } else {
-          this.handleNotFound();
+          this.respondBadRequest('UserId not present in request');
         }
-      } else {
-        this.respondBadRequest('UserId not present in request');
       }
+    } else {
+      this.respondUnauthorized('missing or invalid authentication');
     }
+  }
 
-    console.log('queryId:' + parsedUrl?.query.id);
-
-    const a = '5';
+  private async operationAuthorized(operation: AccessRight): Promise<boolean> {
+    const tokenId = this.req.headers.authorization;
+    if (tokenId) {
+      const tokenRights = await this.tokenValidator.validateToken(tokenId);
+      if (tokenRights.accessRights.includes(operation)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 }

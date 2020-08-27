@@ -1,6 +1,5 @@
 import * as Nedb from 'nedb';
 import { User } from '../Shared/Model';
-import { Resolver } from 'dns';
 
 export class UsersDBAccess {
   private nedb: Nedb;

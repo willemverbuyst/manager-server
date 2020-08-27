@@ -20,4 +20,23 @@ export class SessionTokenDBAccess {
       });
     });
   }
+
+  public async getToken(tokenId: string): Promise<SessionToken | undefined> {
+    return new Promise((resolve, reject) => {
+      this.nedb.find(
+        { tokenId: tokenId },
+        (err: Error | undefined, docs: any[]) => {
+          if (err) {
+            reject(err);
+          } else {
+            if (docs.length === 0) {
+              resolve(undefined);
+            } else {
+              resolve(docs[0]);
+            }
+          }
+        }
+      );
+    });
+  }
 }
