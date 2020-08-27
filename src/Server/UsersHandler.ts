@@ -1,9 +1,10 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { UsersDBAccess } from '../User/UsersDBAccess';
-import { HTTP_METHODS } from '../Shared/Model';
+import { HTTP_METHODS, HTTP_CODES } from '../Shared/Model';
 import { Utils } from './Utils';
 import { BaseRequestHandler } from './BaseRequestHandler';
+import { stringify } from 'querystring';
 
 export class UserHandler extends BaseRequestHandler {
   private usersDBAccess: UsersDBAccess = new UsersDBAccess();
@@ -26,6 +27,21 @@ export class UserHandler extends BaseRequestHandler {
 
   private async handleGet() {
     const parsedUrl = Utils.getUrlParameters(this.req.url);
+    if (parsedUrl) {
+      const userId = parsedUrl.query.id;
+
+      if (userId) {
+        const user = await this.usersDBAccess.getUsrById(userId as string);
+        if (user) {
+          this.respondJsonObject(HTTP_CODES.OK, user);
+        } else {
+          this.handleNotFound();
+        }
+      } else {
+        this.respondBadRequest('UserId not present in request');
+      }
+    }
+
     console.log('queryId:' + parsedUrl?.query.id);
 
     const a = '5';

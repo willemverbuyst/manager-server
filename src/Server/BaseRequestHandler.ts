@@ -35,4 +35,16 @@ export abstract class BaseRequestHandler {
       });
     });
   }
+
+  protected respondJsonObject(code: HTTP_CODES, object: any) {
+    this.res.writeHead(HTTP_CODES.OK, {
+      'Content-Type': 'application/json',
+    });
+    this.res.write(JSON.stringify(object));
+  }
+
+  protected respondBadRequest(message: string) {
+    this.res.statusCode = HTTP_CODES.BAD_REQUEST;
+    this.res.write(message);
+  }
 }
