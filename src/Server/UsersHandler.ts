@@ -1,18 +1,15 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { Handler } from './Model';
+
 import { UsersDBAccess } from '../User/UsersDBAccess';
-import { HTTP_METHODS, HTTP_CODES } from '../Shared/Model';
+import { HTTP_METHODS } from '../Shared/Model';
 import { Utils } from './Utils';
+import { BaseRequestHandler } from './BaseRequestHandler';
 
-export class UserHandler implements Handler {
-  private req: IncomingMessage;
-  private res: ServerResponse;
-
+export class UserHandler extends BaseRequestHandler {
   private usersDBAccess: UsersDBAccess = new UsersDBAccess();
 
   constructor(req: IncomingMessage, res: ServerResponse) {
-    this.req = req;
-    this.res = res;
+    super(req, res);
   }
 
   async handleRequest(): Promise<void> {
@@ -32,10 +29,5 @@ export class UserHandler implements Handler {
     console.log('queryId:' + parsedUrl?.query.id);
 
     const a = '5';
-  }
-
-  private async handleNotFound() {
-    this.res.statusCode = HTTP_CODES.NOT_FOUND;
-    this.res.write('Not found');
   }
 }
