@@ -26,5 +26,7 @@ Content-Type: application/json
   "workingPosition": 4
 }
 
-
+###
+DELETE http://localhost:8080/users?id=wisvzs8dbbl
+Authorization: lsihagi82an
 

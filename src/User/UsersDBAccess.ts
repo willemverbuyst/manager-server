@@ -53,6 +53,31 @@ export class UsersDBAccess {
     });
   }
 
+  public async deleteUser(userId: string): Promise<boolean> {
+    const operationSuccess = await this.deleteUsersFromDb(userId);
+    this.nedb.loadDatabase();
+    return operationSuccess;
+  }
+
+  private async deleteUsersFromDb(userId: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.nedb.remove(
+        { id: userId },
+        (err: Error | null, numRemoved: number) => {
+          if (err) {
+            reject(err);
+          } else {
+            if (numRemoved === 0) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          }
+        }
+      );
+    });
+  }
+
   private generateUserId() {
     return Math.random().toString(36).slice(2);
   }
