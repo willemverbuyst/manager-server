@@ -8,4 +8,17 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/users?id=adfaferwrq24576
-Authorization: cm1qpv2ieut
+Authorization: ab79wyugdc9
+
+###
+PUT http://localhost:8080/users
+Authorization: 64ij8gj25il
+Content-Type: application/json
+
+{
+  "age": 56,
+  "email": "blabla@bla.com",
+  "name": "bladiblabladi",
+  "workingPosition": 4
+}
+

@@ -52,4 +52,9 @@ export abstract class BaseRequestHandler {
     this.res.statusCode = HTTP_CODES.UNAUTHORIZED;
     this.res.write(message);
   }
+
+  protected respondText(httpCode: HTTP_CODES, message: string) {
+    this.res.statusCode = httpCode;
+    this.res.write(message);
+  }
 }

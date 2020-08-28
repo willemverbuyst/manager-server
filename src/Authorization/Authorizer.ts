@@ -19,14 +19,13 @@ export class Authorizer implements TokenGenerator, Tokenvalidator {
       account.username,
       account.password
     );
-
     if (resultAccount) {
       const token: SessionToken = {
         accessRights: resultAccount.accessRights,
         expirationTime: this.generateExpirationTime(),
         username: resultAccount.username,
         valid: true,
-        tokenId: this.genrateRandomTokenId(),
+        tokenId: this.generateRandomTokenId(),
       };
       await this.sessionTokenDBAccess.storeSessionToken(token);
       return token;
@@ -37,7 +36,7 @@ export class Authorizer implements TokenGenerator, Tokenvalidator {
 
   public async validateToken(tokenId: string): Promise<TokenRights> {
     const token = await this.sessionTokenDBAccess.getToken(tokenId);
-    if (!token || token.valid) {
+    if (!token || !token.valid) {
       return {
         accessRights: [],
         state: TokenState.INVALID,
@@ -47,19 +46,18 @@ export class Authorizer implements TokenGenerator, Tokenvalidator {
         accessRights: [],
         state: TokenState.EXPIRED,
       };
-    } else {
-      return {
-        accessRights: token.accessRights,
-        state: TokenState.VALID,
-      };
     }
+    return {
+      accessRights: token.accessRights,
+      state: TokenState.VALID,
+    };
   }
 
   private generateExpirationTime() {
     return new Date(Date.now() + 60 * 60 * 1000);
   }
 
-  private genrateRandomTokenId() {
+  private generateRandomTokenId() {
     return Math.random().toString(36).slice(2);
   }
 }

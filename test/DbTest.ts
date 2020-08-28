@@ -10,7 +10,7 @@ class DbTest {
 new DbTest().dbAcess.putUserCredential({
   username: 'user1',
   password: '1234',
-  accessRights: [1, 2, 3],
+  accessRights: [0, 1, 2, 3],
 });
 
 // new DbTest().userDBAccess.putUser({
