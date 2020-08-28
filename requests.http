@@ -11,6 +11,10 @@ GET http://localhost:8080/users?id=adfaferwrq24576
 Authorization: ab79wyugdc9
 
 ###
+GET http://localhost:8080/users?name=Joh
+Authorization: 3tz0rnh1913
+
+###
 PUT http://localhost:8080/users
 Authorization: 64ij8gj25il
 Content-Type: application/json
@@ -21,4 +25,6 @@ Content-Type: application/json
   "name": "bladiblabladi",
   "workingPosition": 4
 }
+
+
 
