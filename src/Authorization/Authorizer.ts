@@ -8,7 +8,9 @@ import {
 } from '../Server/Model';
 import { UserCredentialsDBAccess } from './UserCredentialsDBAccess';
 import { SessionTokenDBAccess } from './SessionTokenDbAccess';
+import { countInstances } from '../Shared/ObjectCounter';
 
+@countInstances
 export class Authorizer implements TokenGenerator, Tokenvalidator {
   private userCredDBAccess: UserCredentialsDBAccess = new UserCredentialsDBAccess();
 

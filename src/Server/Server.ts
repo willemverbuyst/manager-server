@@ -3,6 +3,7 @@ import { Utils } from './Utils';
 import { LoginHandler } from './LoginHandler';
 import { Authorizer } from '../Authorization/Authorizer';
 import { UserHandler } from './UsersHandler';
+import { Monitor } from '../Shared/ObjectCounter';
 
 export class Server {
   private authorizer: Authorizer = new Authorizer();
@@ -15,6 +16,9 @@ export class Server {
       const basePath = Utils.getUrlBasePath(req.url);
 
       switch (basePath) {
+        case 'systemInfo':
+          res.write(Monitor.printInstances());
+          break;
         case 'login':
           await new LoginHandler(req, res, this.authorizer).handleRequest();
           break;
@@ -33,6 +37,7 @@ export class Server {
 
   private addCorsHeader(res: ServerResponse) {
     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-allow-Methods', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
   }
 }

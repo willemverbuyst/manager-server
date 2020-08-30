@@ -4,6 +4,7 @@
     "strictNullChecks": true,
     "strict": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "experimentalDecorators": true
   }
 }

@@ -7,12 +7,15 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8080/systemInfo
+
+###
 GET http://localhost:8080/users?id=adfaferwrq24576
 Authorization: ab79wyugdc9
 
 ###
 GET http://localhost:8080/users?name=Joh
-Authorization: 3tz0rnh1913
+Authorization: 61oqoi28b9t
 
 ###
 PUT http://localhost:8080/users
