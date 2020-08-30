@@ -4,9 +4,12 @@ import { LoginHandler } from './LoginHandler';
 import { Authorizer } from '../Authorization/Authorizer';
 import { UserHandler } from './UsersHandler';
 import { Monitor } from '../Shared/ObjectCounter';
+import { User } from '../Shared/Model';
 
 export class Server {
   private authorizer: Authorizer = new Authorizer();
+  private loginHandler: LoginHandler = new LoginHandler(this.authorizer);
+  private usersHandler: UserHandler = new UserHandler(this.authorizer);
 
   public createServer() {
     createServer(async (req: IncomingMessage, res: ServerResponse) => {
@@ -20,11 +23,15 @@ export class Server {
           res.write(Monitor.printInstances());
           break;
         case 'login':
-          await new LoginHandler(req, res, this.authorizer).handleRequest();
+          this.loginHandler.setRequest(req);
+          this.loginHandler.setResponse(res);
+          await this.loginHandler.handleRequest();
           break;
 
         case 'users':
-          await new UserHandler(req, res, this.authorizer).handleRequest();
+          this.usersHandler.setRequest(req);
+          this.usersHandler.setResponse(res);
+          await this.usersHandler.handleRequest();
           break;
 
         default:
