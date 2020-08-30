@@ -5,6 +5,7 @@
     "strict": true,
     "outDir": "dist",
     "rootDir": "src",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "target": "ES5"
   }
 }

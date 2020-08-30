@@ -9,6 +9,7 @@ import {
 import { UserCredentialsDBAccess } from './UserCredentialsDBAccess';
 import { SessionTokenDBAccess } from './SessionTokenDbAccess';
 import { countInstances } from '../Shared/ObjectCounter';
+import { logInvocation } from '../Shared/MethodDecorators';
 
 @countInstances
 export class Authorizer implements TokenGenerator, Tokenvalidator {
@@ -16,6 +17,7 @@ export class Authorizer implements TokenGenerator, Tokenvalidator {
 
   private sessionTokenDBAccess: SessionTokenDBAccess = new SessionTokenDBAccess();
 
+  @logInvocation
   async generateToken(account: Account): Promise<SessionToken | undefined> {
     const resultAccount = await this.userCredDBAccess.getUserCredential(
       account.username,
