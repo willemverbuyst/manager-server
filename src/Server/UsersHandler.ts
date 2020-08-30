@@ -5,7 +5,6 @@ import { HTTP_METHODS, HTTP_CODES, AccessRight, User } from '../Shared/Model';
 import { Utils } from './Utils';
 import { BaseRequestHandler } from './BaseRequestHandler';
 import { Tokenvalidator } from './Model';
-import { parse } from 'path';
 
 export class UserHandler extends BaseRequestHandler {
   private usersDBAccess: UsersDBAccess = new UsersDBAccess();
@@ -22,6 +21,9 @@ export class UserHandler extends BaseRequestHandler {
 
   async handleRequest(): Promise<void> {
     switch (this.req.method) {
+      case HTTP_METHODS.OPTIONS:
+        this.res.writeHead(HTTP_CODES.OK);
+        break;
       case HTTP_METHODS.GET:
         await this.handleGet();
         break;
